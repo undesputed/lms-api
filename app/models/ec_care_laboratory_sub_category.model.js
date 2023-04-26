@@ -9,28 +9,38 @@ const SubCategory = function (subCategory) {
   this.deleted_at = subCategory.deleted_at;
 };
 
-SubCategory.findByCategoryId = (category_id) => {
-  return new Promise((resolve, reject) => {
-    sql.query(
-      `SELECT * FROM ec_care_laboratory_sub_category WHERE category_id = ?`,
-      [category_id],
-      (err, res) => {
-        if (err) {
-          console.log("Error: ", err);
-          reject(err);
-          return;
-        }
+SubCategory.findAll = (result) => {
+  sql.query(`SELECT * FROM ec_care_laboratory_sub_category`, (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(null, err);
+      return;
+    }
 
-        if (res.length) {
-          console.log("Found Sub Category: ", res);
-          resolve(res);
-          return;
-        }
-
-        reject({ kind: "not_found" });
-      }
-    );
+    console.log("Sub Category: ", res);
+    result(null, res);
   });
+  // return new Promise((resolve, reject) => {
+  //   sql.query(
+  //     `SELECT * FROM ec_care_laboratory_sub_category WHERE category_id = ?`,
+  //     [category_id],
+  //     (err, res) => {
+  //       if (err) {
+  //         console.log("Error: ", err);
+  //         reject(err);
+  //         return;
+  //       }
+
+  //       if (res.length) {
+  //         console.log("Found Sub Category: ", res);
+  //         resolve(res);
+  //         return;
+  //       }
+
+  //       reject({ kind: "not_found" });
+  //     }
+  //   );
+  // });
 };
 
 module.exports = SubCategory;

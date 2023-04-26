@@ -31,18 +31,21 @@ Category.create = (newCategory) => {
   });
 };
 
-Category.getAll = () => {
-  return new Promise((resolve, reject) => {
-    sql.query("SELECT * FROM ec_care_laboratory_category", (err, res) => {
-      if (err) {
-        console.log("Error: ", err);
-        reject(err);
-        return;
-      }
+Category.getAll = (name, result) => {
+  let query = "SELECT * FROM ec_care_laboratory_category";
+  if (name) {
+    query += `WHERE category_name LIKE %${name}%`;
+  }
 
-      console.log("Categories: ", res);
-      resolve(res);
-    });
+  sql.query(query, (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(null, err);
+      return;
+    }
+
+    console.log("Category: ", res);
+    result(null, res);
   });
 };
 
