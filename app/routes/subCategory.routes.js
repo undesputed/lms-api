@@ -8,7 +8,7 @@ module.exports = (app) => {
   //Create
 
   //Retrieve
-  router.get("/", authMiddleware, subCategory.findByCategory);
+  router.get("/", subCategory.findByCategory);
   //Update
 
   //Delete

@@ -8,6 +8,7 @@ const {
 
 module.exports = (app) => {
   const auth = require("../controllers/auth.controller");
+  const receptionist = require("../controllers/receptionist.controller");
   const user = require("../controllers/user.controller");
 
   var router = require("express").Router();
@@ -22,6 +23,9 @@ module.exports = (app) => {
   router.post("/google/login", login);
   router.post("/google/register", register);
   router.post("/google/googleRegister", googleRegister);
+
+  router.post("/receptionist/login", receptionist.login);
+  router.post("/receptionist/register", receptionist.register);
 
   app.use("/api/auth", router);
 };
