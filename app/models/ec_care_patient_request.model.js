@@ -85,7 +85,7 @@ PatientRequest.updateStatus = (status, id, result) => {
 
       if (res.affectedRows == 0) {
         result({ kind: "not_found" });
-        returnl;
+        return;
       }
 
       console.log("Updated Patient Request: ", {
