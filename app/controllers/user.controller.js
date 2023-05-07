@@ -15,3 +15,14 @@ exports.findOne = (req, res) => {
     } else res.send(data);
   });
 };
+
+exports.findAll = (req, res) => {
+  User.getAll((err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving all Users. ",
+      });
+    else res.send(data);
+  });
+};

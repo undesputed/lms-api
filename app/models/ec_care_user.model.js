@@ -37,28 +37,26 @@ User.create = (newUser) => {
   });
 };
 
-User.findEmail = (email) => {
-  return new Promise((resolve, reject) => {
-    sql.query(
-      `SELECT * FROM ec_care_user WHERE email = ?`,
-      [email],
-      (err, res) => {
-        if (err) {
-          console.log("Error: ", err);
-          reject(err);
-          return;
-        }
-
-        if (res.length) {
-          console.log("Found User email: ", res[0]);
-          resolve(res[0]);
-          return;
-        }
-
-        reject({ kind: "not_found" });
+User.findEmail = (email, result) => {
+  sql.query(
+    `SELECT * FROM ec_care_user WHERE email = ?`,
+    [email],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
       }
-    );
-  });
+
+      if (res.length) {
+        console.log("Found User email: ", res[0]);
+        result(null, res[0]);
+        return;
+      }
+
+      result({ kind: "not_found" }, null);
+    }
+  );
 };
 
 User.findUsernameOrEmail = (newUser, result) => {
@@ -81,6 +79,19 @@ User.findUsernameOrEmail = (newUser, result) => {
       result({ kind: "not_found" }, null);
     }
   );
+};
+
+User.getAll = (result) => {
+  sql.query("SELECT * FROM ec_care_user", (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(null, err);
+      return;
+    }
+
+    console.log("Patient list: ", res);
+    result(null, res);
+  });
 };
 
 module.exports = User;
