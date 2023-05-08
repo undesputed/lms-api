@@ -94,4 +94,22 @@ User.getAll = (result) => {
   });
 };
 
+User.findById = (id, result) => {
+  sql.query(`SELECT * FROM ec_care_user WHERE id = ${id}`, (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("Found Patient; ", res[0]);
+      result(null, res[0]);
+      return;
+    }
+
+    result({ kind: "not_found" }, null);
+  });
+};
+
 module.exports = User;
