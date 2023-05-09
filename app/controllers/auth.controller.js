@@ -53,9 +53,9 @@ exports.login = (req, res) => {
 };
 
 exports.register = async (req, res) => {
-  const { username, password, email } = req.body;
+  const { password, email } = req.body;
 
-  if (!username || !password || !email) {
+  if (!password || !email) {
     return res.status(400).send({
       message: "All fields are required.",
     });
@@ -65,18 +65,40 @@ exports.register = async (req, res) => {
     //Has the password
     const hashedPassword = await bcrypt.hash(password, 16);
     const newUser = new User({
-      username: username,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      middleName: req.body.middleName,
+      phone: req.body.phone,
+      address: req.body.address,
+      sex: req.body.sex,
+      age: req.body.age,
+      birthday: req.body.birthday,
+      username: email,
       email: email,
+      emailVerifiedAt: 1,
       password: hashedPassword,
+      rememberToken: 1,
+      exp: 1,
+      userType: "patient",
+      loginType: "patient",
+      authBy: 0,
+      created_at: new Date(),
     });
 
     const handleResult = async (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
-          await User.create(newUser);
-
-          res.send({
-            message: "Registration Successful.",
+          User.create(newUser, (error, result) => {
+            if (error) {
+              res.status(500).send({
+                message:
+                  error.message || "Some error occurred while registration. ",
+              });
+            } else {
+              res.send({
+                message: "Registration Successful.",
+              });
+            }
           });
         } else {
           return res.status(500).send({
@@ -85,7 +107,7 @@ exports.register = async (req, res) => {
         }
       } else {
         return res.status(409).send({
-          message: "Username or email already in use.",
+          message: "Email or email already in use.",
         });
       }
     };

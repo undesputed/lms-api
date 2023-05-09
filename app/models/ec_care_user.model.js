@@ -4,6 +4,11 @@ const User = function (user) {
   this.firstName = user.firstName;
   this.lastName = user.lastName;
   this.middleName = user.middleName;
+  this.phone = user.phone;
+  this.address = user.address;
+  this.sex = user.sex;
+  this.age = user.age;
+  this.birthday = user.birthday;
   this.username = user.username;
   this.email = user.email;
   this.emailVerifiedAt = user.emailVerifiedAt;
@@ -12,27 +17,27 @@ const User = function (user) {
   this.exp = user.exp;
   this.userType = user.userType;
   this.status = user.status;
-  this.createdAt = user.createdAt;
-  this.updatedAt = user.updatedAt;
-  this.deletedAt = user.deletedAt;
+  this.created_at = user.created_at;
+  this.updated_at = user.updated_at;
   this.authBy = user.authBy;
   this.loginType = user.loginType;
 };
 
-User.create = (newUser) => {
-  return new Promise((resolve, reject) => {
-    sql.query("INSERT INTO ec_care_user SET ?", newUser, (err, res) => {
-      if (err) {
-        console.log("Error: ", err);
-        reject(err);
-        return;
-      }
+User.create = (newUser, result) => {
+  sql.query("INSERT INTO ec_care_user SET ?", newUser, (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(err, null);
+      return;
+    }
 
-      console.log("Created user: ", {
-        id: res.insertId,
-        ...newUser,
-      });
-      resolve({ id: res.insertId, ...newUser });
+    console.log("Created new Patient: ", {
+      id: res.insertId,
+      newUser,
+    });
+    result(null, {
+      id: res.insertId,
+      ...newUser,
     });
   });
 };
