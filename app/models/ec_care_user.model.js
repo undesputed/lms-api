@@ -119,8 +119,9 @@ User.findById = (id, result) => {
 
 User.updateById = (id, user, result) => {
   sql.query(
-    "UPDATE ec_care_user SET firstName = ?, lastName = ?, middleName = ?, phone = ?, address = ?, sex = ?,, birthday = ? WHERE id = ? "[
-      (user.firstName,
+    "UPDATE ec_care_user SET firstName = ?, lastName = ?, middleName = ?, phone = ?, address = ?, sex = ?, age = ?, birthday = ?, updated_at = ? WHERE id = ? ",
+    [
+      user.firstName,
       user.lastName,
       user.middleName,
       user.phone,
@@ -128,7 +129,8 @@ User.updateById = (id, user, result) => {
       user.sex,
       user.age,
       user.birthday,
-      id)
+      user.updated_at,
+      id,
     ],
     (err, res) => {
       if (err) {
@@ -148,4 +150,25 @@ User.updateById = (id, user, result) => {
   );
 };
 
+User.updateEmailById = (id, email, result) => {
+  sql.query(
+    "UPDATE ec_care_user SET email = ? WHERE id = ?",
+    [email, id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        result({ kind: "not_found" });
+        return;
+      }
+
+      console.log("Updated User: ", { id: id, ...email });
+      result(null, { id: id, email });
+    }
+  );
+};
 module.exports = User;
