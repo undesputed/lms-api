@@ -83,6 +83,7 @@ exports.register = async (req, res) => {
       loginType: "patient",
       authBy: 0,
       created_at: new Date(),
+      status: 1,
     });
 
     const handleResult = async (err, data) => {

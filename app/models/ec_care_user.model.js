@@ -117,4 +117,35 @@ User.findById = (id, result) => {
   });
 };
 
+User.updateById = (id, user, result) => {
+  sql.query(
+    "UPDATE ec_care_user SET firstName = ?, lastName = ?, middleName = ?, phone = ?, address = ?, sex = ?,, birthday = ? WHERE id = ? "[
+      (user.firstName,
+      user.lastName,
+      user.middleName,
+      user.phone,
+      user.address,
+      user.sex,
+      user.age,
+      user.birthday,
+      id)
+    ],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        result({ kind: "not_found" });
+        return;
+      }
+
+      console.log("Update User: ", { id: id, ...user });
+      result(null, { id: id, ...user });
+    }
+  );
+};
+
 module.exports = User;
