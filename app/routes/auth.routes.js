@@ -17,15 +17,17 @@ module.exports = (app) => {
   router.post("/register", auth.register);
 
   router.get("/user/:email", user.findOne);
-
   router.get("/google/googleLogin", googleLogin);
   router.get("/google/callback", googleCallback);
+
   router.post("/google/login", login);
   router.post("/google/register", register);
   router.post("/google/googleRegister", googleRegister);
 
   router.post("/receptionist/login", receptionist.login);
   router.post("/receptionist/register", receptionist.register);
+
+  router.put("/updatePassword", auth.updatePassword);
 
   app.use("/api/auth", router);
 };

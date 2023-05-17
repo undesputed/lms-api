@@ -54,7 +54,6 @@ User.findEmail = (email, result) => {
       }
 
       if (res.length) {
-        console.log("Found User email: ", res[0]);
         result(null, res[0]);
         return;
       }
@@ -100,21 +99,35 @@ User.getAll = (result) => {
 };
 
 User.findById = (id, result) => {
-  sql.query(`SELECT * FROM ec_care_user WHERE id = ${id}`, (err, res) => {
-    if (err) {
-      console.log("Error: ", err);
-      result(err, null);
-      return;
-    }
+  sql.query(
+    `SELECT 
+    firstName,
+    lastName,
+    middleName,
+    phone,
+    address,
+    sex,
+    age,
+    birthday,
+    email,
+    username
+  FROM ec_care_user WHERE id = ${id}`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
 
-    if (res.length) {
-      console.log("Found Patient; ", res[0]);
-      result(null, res[0]);
-      return;
-    }
+      if (res.length) {
+        console.log("Found Patient; ", res[0]);
+        result(null, res[0]);
+        return;
+      }
 
-    result({ kind: "not_found" }, null);
-  });
+      result({ kind: "not_found" }, null);
+    }
+  );
 };
 
 User.updateById = (id, user, result) => {
@@ -166,9 +179,30 @@ User.updateEmailById = (id, email, result) => {
         return;
       }
 
-      console.log("Updated User: ", { id: id, ...email });
+      console.log("Updated User: ", { id: id, email });
       result(null, { id: id, email });
     }
   );
 };
+
+User.updatePassByEmail = (email, newPassword, result) => {
+  sql.query(
+    "UPDATE ec_care_user SET password = ? WHERE email = ?",
+    [newPassword, email],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows === 0) {
+        result({ kind: "not_found" });
+        return;
+      }
+      result(null, { email: email, password: newPassword });
+    }
+  );
+};
+
 module.exports = User;

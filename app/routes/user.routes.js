@@ -5,6 +5,7 @@ module.exports = (app) => {
 
   router.get("/", user.findAll);
   router.get("/:id", user.findOne);
+  router.get("/:email", user.retrieveUserByEmail);
 
   router.put("/updateDetail/:id", user.updateDetailsById);
   router.put("/updateEmail/:id", user.updateUserEmailById);

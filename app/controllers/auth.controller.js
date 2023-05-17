@@ -121,3 +121,61 @@ exports.register = async (req, res) => {
     });
   }
 };
+
+exports.updatePassword = (req, res) => {
+  const { email, oldPass, newPass, confirmPass } = req.body;
+
+  if (!email || !oldPass || !newPass || !confirmPass) {
+    return res.status(400).send({
+      message: "All fields is required!",
+    });
+  }
+
+  //Check if the email exists
+  User.findEmail(email, async (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        return res.status(404).send({
+          message: `User Not found with Email: ${email}`,
+        });
+      } else {
+        return res.status(500).send({
+          message: "Error retrieving Patient with email " + email,
+        });
+      }
+    }
+
+    if (!data) {
+      return res.data(401).send({
+        message: "Invalid username or password",
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(oldPass, data.password);
+    if (!isPasswordValid) {
+      return res.status(401).send({
+        message: "Invalid Password",
+      });
+    }
+
+    //Check if the newPass and confirmPass if equal
+    if (newPass !== confirmPass) {
+      return res.status(401).send({
+        message: "Password does not match!!",
+      });
+    }
+
+    //Update the password with the new password by email
+    const hashedNewPassword = await bcrypt.hash(newPass, 16);
+
+    User.updatePassByEmail(email, hashedNewPassword, (error, updateData) => {
+      if (error) {
+        return res.status(500).send({
+          message: error.message || "Some error occurred while updating. ",
+        });
+      } else {
+        return res.status(200).send(updateData);
+      }
+    });
+  });
+};
