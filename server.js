@@ -23,6 +23,7 @@ require("./app/routes/category.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/requestFormLabTest")(app);
 require("./app/routes/requestForm")(app);
+require("./app/routes/receptionistNotification.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

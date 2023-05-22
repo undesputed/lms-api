@@ -64,7 +64,7 @@ RequestFormLabTest.getAll = (result) => {
 
 RequestFormLabTest.getMaxLabTestByFormId = (id, result) => {
   sql.query(
-    `SELECT *, MAX(sub_category_id) as total_test FROM ec_care_request_form_lab_test WHERE request_form_id = ${id}`,
+    `SELECT *, COUNT(sub_category_id) as total_test FROM ec_care_request_form_lab_test WHERE request_form_id = ${id}`,
     (err, res) => {
       if (err) {
         console.log("Error: ", err);

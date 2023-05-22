@@ -11,6 +11,9 @@ exports.create = (req, res) => {
         .replace("T", " "),
       status: req.body.status,
       authBy: req.body.authBy,
+      receivedBy: req.body.receivedBy ? req.body.receivedBy : "",
+      releasedBy: req.body.releasedBy ? req.body.releasedBy : "",
+      releaseDate: req.body.releaseDate ? req.body.releaseDate : "",
       created_at: new Date(req.body.created_at)
         .toISOString()
         .slice(0, 19)

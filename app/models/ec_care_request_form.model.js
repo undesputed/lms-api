@@ -5,6 +5,9 @@ const RequestForm = function (requestForm) {
   this.dateOfVisit = requestForm.dateOfVisit;
   this.status = requestForm.status;
   this.authBy = requestForm.authBy;
+  this.receivedBy = requestForm.receivedBy;
+  this.releasedBy = requestForm.releasedBy;
+  this.releaseDate = requestForm.releaseDate;
   this.created_at = requestForm.created_at;
   this.updated_at = requestForm.updated_at;
 };

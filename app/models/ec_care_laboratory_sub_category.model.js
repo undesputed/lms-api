@@ -2,6 +2,7 @@ const sql = require("./db");
 
 const SubCategory = function (subCategory) {
   this.sub_category_name = subCategory.sub_category_name;
+  this.price = subCategory.price;
   this.status = subCategory.status;
   this.authBy = subCategory.authBy;
   this.created_at = subCategory.created_at;

@@ -1,7 +1,6 @@
 const sql = require("./db");
 
 const ReceptionistNotification = function (receptionistNotification) {
-  this.user_id = receptionistNotification.user_id;
   this.receptionist_id = receptionistNotification.receptionist_id;
   this.patient_request_id = receptionistNotification.patient_request_id;
   this.message = receptionistNotification.message;
@@ -68,20 +67,36 @@ ReceptionistNotification.findByUnread = (result) => {
 };
 
 ReceptionistNotification.findByRead = (result) => {
-    sql.query(
-      `SELECT * FROM ec_care_receptionist_notification WHERE id_read = 1`,
-      (err, res) => {
-        if (err) {
-          console.log("Error: ", err);
-          result(null, err);
-          return;
-        }
-  
-        console.log("Notification: ", res);
-        result(null, res);
+  sql.query(
+    `SELECT * FROM ec_care_receptionist_notification WHERE is_read = 1`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
       }
-    );
-  };
+
+      console.log("Notification: ", res);
+      result(null, res);
+    }
+  );
+};
+
+ReceptionistNotification.findByRequestId = (id, result) => {
+  sql.query(
+    `SELECT * FROM ec_care_receptionist_notification WHERE patient_request_id = ${id}`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      console.log("Notification: ", res);
+      result(null, res);
+    }
+  );
+};
 
 ReceptionistNotification.updateIsRead = (isRead, id, result) => {
   sql.query(
