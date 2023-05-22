@@ -2,12 +2,7 @@ const sql = require("./db");
 
 const RequestForm = function (requestForm) {
   this.user_id = requestForm.user_id;
-  this.fullName = requestForm.fullName;
   this.dateOfVisit = requestForm.dateOfVisit;
-  this.birthday = requestForm.birthday;
-  this.age = requestForm.age;
-  this.sex = requestForm.sex;
-  this.address = requestForm.address;
   this.status = requestForm.status;
   this.authBy = requestForm.authBy;
   this.created_at = requestForm.created_at;
@@ -25,11 +20,11 @@ RequestForm.create = (newRequestForm, result) => {
         return;
       }
 
-      console.log("Created Reqeust Form: ", {
+      console.log("Created Request Form: ", {
         id: res.insertId,
         ...newRequestForm,
       });
-      result(null, { id: res.insertId, ...newRequestForm });
+      result(null, [{ id: res.insertId, ...newRequestForm }]);
     }
   );
 };
@@ -54,6 +49,27 @@ RequestForm.findById = (id, result) => {
   );
 };
 
+RequestForm.findUserByIdStatus = (id, result) => {
+  sql.query(
+    `SELECT * FROM ec_care_request_form WHERE id = ${id} AND status = 1`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        result;
+      }
+
+      if (res.length) {
+        console.log("Found Pending Request: ", res[0]);
+        result(null, res[0]);
+        return;
+      }
+
+      result({ kind: "not_found" }, null);
+    }
+  );
+};
+
 RequestForm.getAll = (result) => {
   sql.query(`SELECT * FROM ec_care_request_form`, (err, res) => {
     if (err) {
@@ -65,6 +81,47 @@ RequestForm.getAll = (result) => {
     console.log("Request Form: ", res);
     result(null, res);
   });
+};
+
+RequestForm.findRequestByUserId = (userId, result) => {
+  sql.query(
+    `SELECT * FROM ec_care_request_form WHERE user_id = ? AND status = 1`,
+    [userId],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        result(null, res[0]);
+        return;
+      }
+
+      result({ kind: "not_found" }, null);
+    }
+  );
+};
+
+RequestForm.findAllRequestByUserId = (id, result) => {
+  sql.query(
+    `SELECT * FROM ec_care_request_form WHERE user_id = ${id}`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        result(null, res);
+        return;
+      }
+
+      result({ kind: "not_found" }, null);
+    }
+  );
 };
 
 module.exports = RequestForm;

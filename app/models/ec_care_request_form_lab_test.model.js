@@ -50,4 +50,33 @@ RequestFormLabTest.findByRequestFormId = (id, result) => {
   );
 };
 
+RequestFormLabTest.getAll = (result) => {
+  sql.query(`SELECT * FROM ec_care_request_form_lab_test`, (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(err, null);
+      return;
+    }
+    console.log("Request Form Lab Test : ", res);
+    result(null, res);
+  });
+};
+
+RequestFormLabTest.getMaxLabTestByFormId = (id, result) => {
+  sql.query(
+    `SELECT *, MAX(sub_category_id) as total_test FROM ec_care_request_form_lab_test WHERE request_form_id = ${id}`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+
+      console.log("Request Form Labe test: ", res);
+      result(null, res);
+    }
+  );
+};
+
+
 module.exports = RequestFormLabTest;
