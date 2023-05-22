@@ -87,3 +87,19 @@ exports.getAllUserRequests = (req, res) => {
     } else res.send(data);
   });
 };
+
+exports.getAllPendingRequests = (req, res) => {
+  RequestForm.findAllPendingRequest((err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        return res.status(404).send({
+          message: `No Pending Requests`,
+        });
+      } else {
+        return res.status(500).send({
+          message: "Error Retrieving All the Pending Request.",
+        });
+      }
+    } else res.send(data);
+  });
+};

@@ -4,6 +4,7 @@ module.exports = (app) => {
   const requestForm = require("../controllers/requestForm.controller");
   var router = require("express").Router();
 
+  router.get("/pending/", requestForm.getAllPendingRequests);
   router.get("/:id", requestForm.getPendingUserRequest);
   router.get("/getAllUserRequest/:id", requestForm.getAllUserRequests);
 

@@ -127,4 +127,24 @@ RequestForm.findAllRequestByUserId = (id, result) => {
   );
 };
 
+RequestForm.findAllPendingRequest = (result) => {
+  sql.query(
+    `SELECT * FROM ec_care_request_form WHERE status = 1 ORDER BY created_at desc`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        result(null, res);
+        return;
+      }
+
+      result({ kind: "not_found" }, null);
+    }
+  );
+};
+
 module.exports = RequestForm;

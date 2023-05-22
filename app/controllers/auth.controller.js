@@ -82,7 +82,12 @@ exports.register = async (req, res) => {
       userType: "patient",
       loginType: "patient",
       authBy: 0,
-      created_at: new Date(),
+      created_at: new Date(req.body.created_at)
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ")
+        ? new Date().toISOString().slice(0, 19).replace("T", " ")
+        : null,
       status: 1,
     });
 
