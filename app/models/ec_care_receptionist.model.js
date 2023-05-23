@@ -19,7 +19,7 @@ const Receptionist = function (receptionist) {
   this.loginType = receptionist.loginType;
 };
 
-Receptionist.create = (newReceptionist) => {
+Receptionist.create = (newReceptionist, result) => {
   sql.query(
     "INSERT INTO ec_care_receptionist SET ?",
     newReceptionist,

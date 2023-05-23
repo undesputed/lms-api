@@ -54,7 +54,7 @@ RequestForm.findById = (id, result) => {
 
 RequestForm.findUserByIdStatus = (id, result) => {
   sql.query(
-    `SELECT * FROM ec_care_request_form WHERE id = ${id} AND status = 1`,
+    `SELECT * FROM ec_care_request_form WHERE user_id = ${id} AND status = 1`,
     (err, res) => {
       if (err) {
         console.log("Error: ", err);
@@ -127,9 +127,22 @@ RequestForm.findAllRequestByUserId = (id, result) => {
   );
 };
 
-RequestForm.findAllPendingRequest = (result) => {
+RequestForm.findAllRequest = (result) => {
   sql.query(
-    `SELECT * FROM ec_care_request_form WHERE status = 1 ORDER BY created_at desc`,
+    `SELECT 
+    ec_care_request_form.*, 
+    ec_care_user.firstName, 
+    ec_care_user.lastName, 
+    ec_care_user.middleName,
+    ec_care_user.phone, 
+    ec_care_user.address, 
+    ec_care_user.sex, 
+    ec_care_user.age, 
+    ec_care_user.birthday 
+    FROM 
+    ec_care_request_form 
+    INNER JOIN ec_care_user ON ec_care_user.id = ec_care_request_form.user_id
+    ORDER BY ec_care_request_form.user_id desc`,
     (err, res) => {
       if (err) {
         console.log("Error: ", err);

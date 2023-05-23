@@ -11,9 +11,9 @@ exports.create = (req, res) => {
         .replace("T", " "),
       status: req.body.status,
       authBy: req.body.authBy,
-      receivedBy: req.body.receivedBy ? req.body.receivedBy : "",
-      releasedBy: req.body.releasedBy ? req.body.releasedBy : "",
-      releaseDate: req.body.releaseDate ? req.body.releaseDate : "",
+      receivedBy: req.body.receivedBy ? req.body.receivedBy : null,
+      releasedBy: req.body.releasedBy ? req.body.releasedBy : null,
+      releaseDate: req.body.releaseDate ? req.body.releaseDate : null,
       created_at: new Date(req.body.created_at)
         .toISOString()
         .slice(0, 19)
@@ -89,7 +89,7 @@ exports.getAllUserRequests = (req, res) => {
 };
 
 exports.getAllPendingRequests = (req, res) => {
-  RequestForm.findAllPendingRequest((err, data) => {
+  RequestForm.findAllRequest((err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         return res.status(404).send({
