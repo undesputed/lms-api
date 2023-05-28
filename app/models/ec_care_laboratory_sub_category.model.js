@@ -1,6 +1,7 @@
 const sql = require("./db");
 
 const SubCategory = function (subCategory) {
+  this.category_id = subCategory.category_id;
   this.sub_category_name = subCategory.sub_category_name;
   this.price = subCategory.price;
   this.status = subCategory.status;

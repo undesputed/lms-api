@@ -78,5 +78,20 @@ RequestFormLabTest.getMaxLabTestByFormId = (id, result) => {
   );
 };
 
+RequestFormLabTest.getAllLabTestByFormId = (id, result) => {
+  sql.query(
+    `SELECT * FROM ec_care_request_form_lab_test WHERE request_form_id = ${id}`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+
+      console.log("Request Form Last Test: ", res);
+      result(null, res);
+    }
+  );
+};
 
 module.exports = RequestFormLabTest;

@@ -62,3 +62,15 @@ exports.getAllMaxTestRequestFormById = (req, res) => {
     else res.send(data);
   });
 };
+
+exports.getLabTestByFormId = (req, res) => {
+  RequestFormLabTest.getAllLabTestByFormId(req.params.id, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message ||
+          "Some error occurred while retrieving Request Form Lab Test.",
+      });
+    else res.send(data);
+  });
+};

@@ -5,6 +5,7 @@ module.exports = (app) => {
 
   var router = require("express").Router();
 
+  router.get("/fetchLabTestByForm/:id", requestFormLabTest.getLabTestByFormId);
   router.get("/", requestFormLabTest.getAllRequestFormLabTest);
   router.get("/labTest/:id", requestFormLabTest.getAllMaxTestRequestFormById);
   router.get("/:id", requestFormLabTest.getFormByRequestForm);

@@ -1,6 +1,7 @@
 const sql = require("./db");
 
 const RequestForm = function (requestForm) {
+  this.basic_info_id = requestForm.basic_info_id;
   this.user_id = requestForm.user_id;
   this.dateOfVisit = requestForm.dateOfVisit;
   this.status = requestForm.status;
@@ -143,6 +144,33 @@ RequestForm.findAllRequest = (result) => {
     ec_care_request_form 
     INNER JOIN ec_care_user ON ec_care_user.id = ec_care_request_form.user_id
     ORDER BY ec_care_request_form.user_id desc`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        result(null, res);
+        return;
+      }
+
+      result({ kind: "not_found" }, null);
+    }
+  );
+};
+
+RequestForm.findAllRequestBasicInfo = (result) => {
+  sql.query(
+    `SELECT 
+    * 
+    FROM ec_care_request_form
+    INNER JOIN 
+    ec_care_basic_info 
+    ON ec_care_basic_info.id = ec_care_request_form.basic_info_id
+    ORDER BY ec_care_request_form.created_at DESC
+    `,
     (err, res) => {
       if (err) {
         console.log("Error: ", err);

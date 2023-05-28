@@ -4,6 +4,7 @@ const moment = require("moment");
 exports.create = (req, res) => {
   try {
     const requestForm = new RequestForm({
+      basic_info_id: req.body.basic_info_id,
       user_id: req.body.user_id,
       dateOfVisit: new Date(req.body.dateOfVisit)
         .toISOString()
@@ -23,31 +24,15 @@ exports.create = (req, res) => {
       updated_at: null,
     });
 
-    const handleResult = async (err, data) => {
-      if (err) {
-        if (err.kind === "not_found") {
-          RequestForm.create(requestForm, (error, newData) => {
-            if (error)
-              res.status(500).send({
-                message:
-                  error.message ||
-                  "Some error occurred while creating a new Request Form.",
-              });
-            else res.send(newData);
-          });
-        } else {
-          return res.status(500).send({
-            message: `There is an error retrieving Pending Requests: ${req.body.user_id}`,
-          });
-        }
-      } else {
-        return res.status(409).send({
-          message: "Error Retrieving Pending Requests.",
+    RequestForm.create(requestForm, (error, newData) => {
+      if (error)
+        res.status(500).send({
+          message:
+            error.message ||
+            "Some error occurred while creating a new Request Form.",
         });
-      }
-    };
-
-    RequestForm.findUserByIdStatus(req.body.user_id, handleResult);
+      else res.send(newData);
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -98,6 +83,38 @@ exports.getAllPendingRequests = (req, res) => {
       } else {
         return res.status(500).send({
           message: "Error Retrieving All the Pending Request.",
+        });
+      }
+    } else res.send(data);
+  });
+};
+
+exports.getAllBasicInfo = (req, res) => {
+  RequestForm.findAllRequestBasicInfo((err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        return res.status(404).send({
+          message: `No Pending request`,
+        });
+      } else {
+        return res.status(500).send({
+          message: "Error Retrieving all the Basic Information.",
+        });
+      }
+    } else res.send(data);
+  });
+};
+
+exports.getFormById = (req, res) => {
+  RequestForm.findById(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found with is ${req.params.id}`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving Form with id" + req.params.id,
         });
       }
     } else res.send(data);
