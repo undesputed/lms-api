@@ -57,3 +57,39 @@ exports.findAll = (req, res) => {
     else res.send(data);
   });
 };
+
+exports.updateBasicInfo = (req, res) => {
+  const id = req.params.id;
+  const newBasicInfo = new BasicInfo({
+    name: req.body.name,
+    dateOfVisit: req.body.dateOfVisit,
+    phone: req.body.phone,
+    birthday: new Date(req.body.birthday)
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " "),
+    gender: req.body.gender,
+    address: req.body.address,
+    companyName: req.body.companyName,
+    others: req.body.others,
+    referredBy: req.body.referredBy,
+    dateRequested: new Date(req.body.dateRequested)
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " "),
+    updated_at: new Date().toISOString().slice(0, 19).replace("T", " "),
+  });
+  BasicInfo.updateById(id, newBasicInfo, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Basic Info with id ${id}`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error updating Basic Info with id " + id,
+        });
+      }
+    } else res.send(data);
+  });
+};

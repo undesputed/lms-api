@@ -120,3 +120,20 @@ exports.getFormById = (req, res) => {
     } else res.send(data);
   });
 };
+
+exports.getBasicInfoByForm = (req, res) => {
+  RequestForm.findBasicInfoByRequestForm(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found with id ${req.params.id}`,
+        });
+      } else {
+        res.status(500).send({
+          message:
+            "Error retrieving Basic Info with request Id " + req.params.id,
+        });
+      }
+    } else res.send(data);
+  });
+};

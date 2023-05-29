@@ -9,8 +9,11 @@ module.exports = (app) => {
   router.get("/", requestFormLabTest.getAllRequestFormLabTest);
   router.get("/labTest/:id", requestFormLabTest.getAllMaxTestRequestFormById);
   router.get("/:id", requestFormLabTest.getFormByRequestForm);
+  router.get("/tests/:id", requestFormLabTest.getLabTestByRequestId);
 
   router.post("/", requestFormLabTest.create);
+
+  router.delete("/", requestFormLabTest.deleteLabTestByFormIdSubId);
 
   app.use("/api/requestFormLabTest", router);
 };

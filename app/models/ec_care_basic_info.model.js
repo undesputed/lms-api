@@ -50,4 +50,41 @@ BasicInfo.getAll = (result) => {
   });
 };
 
+BasicInfo.updateById = (id, newBasicInfo, result) => {
+  sql.query(
+    `UPDATE ec_care_basic_info SET name = ?, dateOfVisit = ?, 
+    phone = ?, birthday = ?, gender = ?, address = ?, companyName = ?, 
+    others = ?, referredBy = ?, dateRequested = ?, updated_at = ? WHERE id = ?`,
+    [
+      newBasicInfo.name,
+      newBasicInfo.dateOfVisit,
+      newBasicInfo.phone,
+      newBasicInfo.birthday,
+      newBasicInfo.gender,
+      newBasicInfo.address,
+      newBasicInfo.companyName,
+      newBasicInfo.others,
+      newBasicInfo.referredBy,
+      newBasicInfo.dateRequested,
+      newBasicInfo.updated_at,
+      id,
+    ],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows === 0) {
+        result({ kind: "not_found" });
+        return;
+      }
+
+      console.log("Updated Basic Info: ", { id: id, newBasicInfo });
+      result(null, { id: id, ...newBasicInfo });
+    }
+  );
+};
+
 module.exports = BasicInfo;

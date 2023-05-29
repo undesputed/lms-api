@@ -94,4 +94,51 @@ RequestFormLabTest.getAllLabTestByFormId = (id, result) => {
   );
 };
 
+RequestFormLabTest.findAllLabTestByFormId = (id, result) => {
+  sql.query(
+    `SELECT ec_care_laboratory_sub_category.* FROM ec_care_request_form_lab_test
+    INNER JOIN ec_care_laboratory_sub_category ON ec_care_laboratory_sub_category.id = ec_care_request_form_lab_test.sub_category_id
+    WHERE ec_care_request_form_lab_test.request_form_id = ${id}`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+
+      console.log("Laboratory Tests: ", res);
+      result(null, res);
+    }
+  );
+};
+
+RequestFormLabTest.removeLabTestBySubId = (formId, subId, result) => {
+  sql.query(
+    `DELETE FROM ec_care_request_form_lab_test 
+    WHERE sub_category_id = ${subId} AND request_form_id = ${formId}`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows === 0) {
+        result(
+          {
+            kind: "not_found",
+          },
+          null
+        );
+        return;
+      }
+
+      console.log(
+        `Deleted Lab Test with Request Form Id: ${formId} and sub category id: ${subId}`
+      );
+      result(null, res);
+    }
+  );
+};
+
 module.exports = RequestFormLabTest;

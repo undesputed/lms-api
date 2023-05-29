@@ -164,7 +164,9 @@ RequestForm.findAllRequest = (result) => {
 RequestForm.findAllRequestBasicInfo = (result) => {
   sql.query(
     `SELECT 
-    * 
+    * ,
+    ec_care_basic_info.id as info_id,
+    ec_care_request_form.id as form_id
     FROM ec_care_request_form
     INNER JOIN 
     ec_care_basic_info 
@@ -184,6 +186,33 @@ RequestForm.findAllRequestBasicInfo = (result) => {
       }
 
       result({ kind: "not_found" }, null);
+    }
+  );
+};
+
+RequestForm.findBasicInfoByRequestForm = (id, result) => {
+  sql.query(
+    `SELECT ec_care_basic_info.* FROM ec_care_request_form
+    INNER JOIN ec_care_basic_info ON ec_care_basic_info.id = ec_care_request_form.basic_info_id
+    WHERE ec_care_request_form.id = ${id}`,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        result(null, res);
+        return;
+      }
+
+      result(
+        {
+          kind: "not_found",
+        },
+        null
+      );
     }
   );
 };

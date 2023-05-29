@@ -74,3 +74,37 @@ exports.getLabTestByFormId = (req, res) => {
     else res.send(data);
   });
 };
+
+exports.getLabTestByRequestId = (req, res) => {
+  RequestFormLabTest.findAllLabTestByFormId(req.params.id, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving data",
+      });
+    else res.send(data);
+  });
+};
+
+exports.deleteLabTestByFormIdSubId = (req, res) => {
+  RequestFormLabTest.removeLabTestBySubId(
+    req.body.request_form_id,
+    req.body.sub_category_id,
+    (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found Lab Test with Request Form Id: ${req.body.request_form_id} and Sub Category Id: ${req.body.sub_category_id}`,
+          });
+        } else {
+          res.status(500).send({
+            message:
+              "Could not delete Lab Test with Request Form Id: ${request_form_id} and Sub Category Id: ${sub_category_id}",
+          });
+        }
+      } else
+        res.send({
+          message: `Lab Test Deleted Successfully!`,
+        });
+    }
+  );
+};

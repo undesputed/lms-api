@@ -9,6 +9,7 @@ module.exports = (app) => {
   router.get("/retrieveById/:id", requestForm.getFormById);
   router.get("/getAllUserRequest/:id", requestForm.getAllUserRequests);
   router.get("/basicInfo/", requestForm.getAllBasicInfo);
+  router.get("/basicInfo/:id", requestForm.getBasicInfoByForm);
 
   router.post("/", requestForm.create);
 

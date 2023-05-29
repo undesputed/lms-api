@@ -7,5 +7,7 @@ module.exports = (app) => {
 
   router.get("/", basicInfo.findAll);
 
+  router.put("/:id", basicInfo.updateBasicInfo);
+
   app.use("/api/basicInfo", router);
 };
