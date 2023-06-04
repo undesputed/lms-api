@@ -25,6 +25,7 @@ require("./app/routes/requestFormLabTest")(app);
 require("./app/routes/requestForm")(app);
 require("./app/routes/receptionistNotification.routes")(app);
 require("./app/routes/basicInfo.routes")(app);
+require("./app/routes/payment.routes")(app);
 
 const PORT = process.env.PORT || 1211;
 app.listen(PORT, () => {
