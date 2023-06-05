@@ -13,6 +13,8 @@ module.exports = (app) => {
 
   router.post("/", requestFormLabTest.create);
 
+  router.put("/updateForm", requestFormLabTest.updateLabTestStatusByFormId);
+
   router.delete("/", requestFormLabTest.deleteLabTestByFormIdSubId);
 
   app.use("/api/requestFormLabTest", router);
