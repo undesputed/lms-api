@@ -11,6 +11,8 @@ module.exports = (app) => {
   router.get("/basicInfo/", requestForm.getAllBasicInfo);
   router.get("/basicInfo/:id", requestForm.getBasicInfoByForm);
 
+  router.put("/updateStatus", requestForm.updateFormById);
+
   router.post("/", requestForm.create);
 
   app.use("/api/requestForm", router);

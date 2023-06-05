@@ -108,3 +108,23 @@ exports.deleteLabTestByFormIdSubId = (req, res) => {
     }
   );
 };
+
+exports.updateLabTestStatusByFormId = (req, res) => {
+  RequestFormLabTest.updateStatusByFormId(
+    req.params.request_form_id,
+    (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not Found Lab Test form with id: ${req.params.request_form_id}`,
+          });
+        } else {
+          res.status(500).send({
+            message:
+              "Error updating Request Form id " + req.params.request_form_id,
+          });
+        }
+      } else res.send(data);
+    }
+  );
+};

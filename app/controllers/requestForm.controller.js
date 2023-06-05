@@ -137,3 +137,19 @@ exports.getBasicInfoByForm = (req, res) => {
     } else res.send(data);
   });
 };
+
+exports.updateFormById = (req, res) => {
+  RequestForm.updateStatus(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Request Form with id ${req.params.id}`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error Updating Request Form with id: " + req.params.id,
+        });
+      }
+    } else res.send(data);
+  });
+};

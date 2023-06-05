@@ -2,7 +2,6 @@ const sql = require("./db");
 
 const Payment = function (payment) {
   this.request_form_id = payment.request_form_id;
-  this.basic_info_id = payment.basic_info_id;
   this.payment_type = payment.payment_type;
   this.serial_number = payment.serial_number;
   this.payment_date = payment.payment_date;
