@@ -143,8 +143,12 @@ RequestFormLabTest.removeLabTestBySubId = (formId, subId, result) => {
 
 RequestFormLabTest.updateStatusByFormId = (request_form_id, result) => {
   sql.query(
-    "UPDATE ec_care_request_form_lab_test SET STATUS = ? WHERE request_form_id = ?",
-    [2, request_form_id],
+    "UPDATE ec_care_request_form_lab_test SET STATUS = ?, updated_at = ? WHERE request_form_id = ?",
+    [
+      2,
+      new Date().toISOString().slice(0, 19).replace("T", " "),
+      request_form_id,
+    ],
     (err, res) => {
       if (err) {
         console.log("Error: ", err);
@@ -163,4 +167,29 @@ RequestFormLabTest.updateStatusByFormId = (request_form_id, result) => {
   );
 };
 
+RequestFormLabTest.updateCompletedStatus = (request_form_id, result) => {
+  sql.query(
+    "UPDATE ec_care_request_form_lab_test SET STATUS = ?, updated_at = ? WHERE request_form_id = ?",
+    [
+      3,
+      new Date().toISOString().slice(0, 19).replace("T", " "),
+      request_form_id,
+    ],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows === 0) {
+        result({ kind: "not_found" });
+        return;
+      }
+
+      console.log("Update Lab Test: ", { id: request_form_id });
+      result(null, { id: request_form_id });
+    }
+  );
+};
 module.exports = RequestFormLabTest;

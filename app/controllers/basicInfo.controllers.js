@@ -93,3 +93,19 @@ exports.updateBasicInfo = (req, res) => {
     } else res.send(data);
   });
 };
+
+exports.BasicInfoUpdateStatus = (req, res) => {
+  BasicInfo.updateStatus(req.params.id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Basic Information with id ${req.params.id}`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error Updating Basic info with id " + req.params.id,
+        });
+      }
+    } else res.send(data);
+  });
+};

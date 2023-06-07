@@ -87,4 +87,26 @@ BasicInfo.updateById = (id, newBasicInfo, result) => {
   );
 };
 
+BasicInfo.updateStatus = (id, result) => {
+  sql.query(
+    "UPDATE ec_care_basic_info SET status = 2 WHERE id = ?",
+    [id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows === 0) {
+        result({ kind: "not_found" });
+        return;
+      }
+
+      console.log("Updated Request Form: ", { id: id });
+      result(null, { id: id });
+    }
+  );
+};
+
 module.exports = BasicInfo;

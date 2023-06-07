@@ -165,6 +165,7 @@ RequestForm.findAllRequestBasicInfo = (result) => {
   sql.query(
     `SELECT 
     * ,
+    ec_care_request_form.status as form_status,
     ec_care_basic_info.id as info_id,
     ec_care_request_form.id as form_id
     FROM ec_care_request_form
@@ -219,8 +220,30 @@ RequestForm.findBasicInfoByRequestForm = (id, result) => {
 
 RequestForm.updateStatus = (id, result) => {
   sql.query(
-    "UPDATE ec_care_request_form SET status = 2 WHERE id = ?",
-    [id],
+    "UPDATE ec_care_request_form SET status = 2, updated_at = ? WHERE id = ?",
+    [new Date().toISOString().slice(0, 19).replace("T", " "), id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows === 0) {
+        result({ kind: "not_found" });
+        return;
+      }
+
+      console.log("Updated Request Form: ", { id: id });
+      result(null, { id: id });
+    }
+  );
+};
+
+RequestForm.updateCompletedStatus = (id, result) => {
+  sql.query(
+    "UPDATE ec_care_request_form SET status = 3, updated_at = ? WHERE id = ?",
+    [new Date().toISOString().slice(0, 19).replace("T", " "), id],
     (err, res) => {
       if (err) {
         console.log("Error: ", err);
