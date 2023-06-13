@@ -45,10 +45,15 @@ exports.login = (req, res) => {
         email: data.email,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: 7 * 24 * 60 * 60 * 1000 }
     );
 
     res.set("Authorization", `${token}`);
+
+    res.cookie("token", token, {
+      httpOnly: true, // Ensures the cookie is accessible only by the server
+      maxAge: 7 * 24 * 60 * 60 * 1000, // Expiry time for the cookie (1 hour in this example)
+    });
 
     return res.status(200).send({
       token,
