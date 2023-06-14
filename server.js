@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:3000",
+  origin: ["http://localhost:3000", "http://18.141.160.31"],
 };
 
 app.use(express.json({ limit: "30mb", extended: true }));
