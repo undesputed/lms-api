@@ -6,12 +6,13 @@ module.exports = (app) => {
   var router = require("express").Router();
 
   //Create
-
+  router.post("/", subCategory.create);
   //Retrieve
   router.get("/", subCategory.findByCategory);
   //Update
 
   //Delete
+  router.delete("/:id", subCategory.deleteSubCategory);
 
   app.use("/api/subCategory", router);
 };

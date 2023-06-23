@@ -49,4 +49,28 @@ Category.getAll = (name, result) => {
   });
 };
 
+Category.updateNameById = (id, category_name, result) => {
+  sql.query(
+    "UPDATE ec_care_laboratory_category SET category_name = ? WHERE id = ?",
+    [category_name, id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows === 0) {
+        result({
+          kind: "not_found",
+        });
+        return;
+      }
+
+      console.log("Update Category Name: ", { id: id, category_name });
+      result(null, { id: id, category_name });
+    }
+  );
+};
+
 module.exports = Category;

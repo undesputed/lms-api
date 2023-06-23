@@ -11,6 +11,26 @@ const SubCategory = function (subCategory) {
   this.deleted_at = subCategory.deleted_at;
 };
 
+SubCategory.create = (subCategory, result) => {
+  sql.query(
+    "INSERT INTO ec_care_laboratory_sub_category SET ?",
+    subCategory,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
+      }
+
+      console.log("Created SubCategory: ", {
+        id: res.insertId,
+        ...subCategory,
+      });
+      result(null, { id: res.insertId, ...subCategory });
+    }
+  );
+};
+
 SubCategory.findAll = (result) => {
   sql.query(`SELECT * FROM ec_care_laboratory_sub_category`, (err, res) => {
     if (err) {
@@ -22,27 +42,74 @@ SubCategory.findAll = (result) => {
     console.log("Sub Category: ", res);
     result(null, res);
   });
-  // return new Promise((resolve, reject) => {
-  //   sql.query(
-  //     `SELECT * FROM ec_care_laboratory_sub_category WHERE category_id = ?`,
-  //     [category_id],
-  //     (err, res) => {
-  //       if (err) {
-  //         console.log("Error: ", err);
-  //         reject(err);
-  //         return;
-  //       }
+};
 
-  //       if (res.length) {
-  //         console.log("Found Sub Category: ", res);
-  //         resolve(res);
-  //         return;
-  //       }
+SubCategory.updateNameById = (id, sub_category_name, result) => {
+  sql.query(
+    "UPDATE ec_care_laboratory_sub_category SET sub_category_name = ? WHERE id = ? ",
+    [sub_category_name, id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
 
-  //       reject({ kind: "not_found" });
-  //     }
-  //   );
-  // });
+      if (res.affectedRows === 0) {
+        result({ kind: "not_found" });
+        return;
+      }
+
+      console.log("Updated Sub Category: ", { id: id, sub_category_name });
+      result(null, { id: id, sub_category_name });
+    }
+  );
+};
+
+SubCategory.updatePriceById = (id, price, result) => {
+  sql.query(
+    "UPDATE ec_care_laboratory_sub_category SET price = ? WHERE id = ?",
+    [price, id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows === 0) {
+        result({
+          kind: "not_found",
+        });
+        return;
+      }
+
+      console.log("Updated Sub Category Price: ", { id: id, price });
+      result(null, { id: id, price });
+    }
+  );
+};
+
+SubCategory.remove = (id, result) => {
+  sql.query(
+    "DELETE FROM ec_care_laboratory_sub_category WHERE id = ?",
+    id,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows === 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("Deleted Sub Category with id: ", id);
+      result(null, res);
+    }
+  );
 };
 
 module.exports = SubCategory;
