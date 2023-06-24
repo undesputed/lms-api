@@ -44,6 +44,32 @@ SubCategory.findAll = (result) => {
   });
 };
 
+SubCategory.updateSubCategory = (id, name, price, result) => {
+  sql.query(
+    "UPDATE ec_care_laboratory_sub_category SET sub_category_name = ?, price = ?, updated_at = ? WHERE id = ?",
+    [name, price, new Date().toISOString().slice(0, 19).replace("T", " "), id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows === 0) {
+        result({ kind: "not_found" });
+        return;
+      }
+
+      console.log("Updated Sub Category: ", {
+        id: id,
+        sub_category_name: name,
+        price: price,
+      });
+      result(null, { id: id, sub_category_name: name, price: price });
+    }
+  );
+};
+
 SubCategory.updateNameById = (id, sub_category_name, result) => {
   sql.query(
     "UPDATE ec_care_laboratory_sub_category SET sub_category_name = ? WHERE id = ? ",

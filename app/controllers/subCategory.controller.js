@@ -39,14 +39,39 @@ exports.findByCategory = (req, res) => {
   });
 };
 
+exports.updateSubCategory = (req, res) => {
+  if (!req.body && !req.params) {
+    res.status(400).send({
+      message: "Price and Name cannot be empty!",
+    });
+  }
+
+  SubCategory.updateSubCategory(
+    req.params.id,
+    req.body.sub_category_name,
+    req.body.price,
+    (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          req.status(404).send({
+            message: `Not found Sub Category with id ${req.params.id}`,
+          });
+        } else {
+          res.status(500).send({
+            message: `Error Updating Sub Category with id: ${req.params.id}`,
+          });
+        }
+      } else res.send(data);
+    }
+  );
+};
+
 exports.updateName = (req, res) => {
   if (!req.body) {
     res.status(400).send({
       message: "Sub Category name cannot be empty!",
     });
   }
-
-  console.log(req.body);
 
   SubCategory.updateNameById(
     req.params.id,

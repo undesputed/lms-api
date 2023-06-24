@@ -9,26 +9,24 @@ const Category = function (category) {
   this.deleted_at = category.deleted_at;
 };
 
-Category.create = (newCategory) => {
-  return new Promise((resolve, reject) => {
-    sql.query(
-      "INSERT INTO ec_care_laboratory_category SET ?",
-      newCategory,
-      (err, res) => {
-        if (err) {
-          console.log("Error: ", err);
-          reject(err);
-          return;
-        }
-
-        console.log("Created Laboratory Category: ", {
-          id: res.insertId,
-          ...newCategory,
-        });
-        resolve({ id: res.insertId, ...newCategory });
+Category.create = (newCategory, result) => {
+  sql.query(
+    "INSERT INTO ec_care_laboratory_category SET ?",
+    newCategory,
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+        return;
       }
-    );
-  });
+
+      console.log("Created Laboratory Category: ", {
+        id: res.insertId,
+        ...newCategory,
+      });
+      result(null, { id: res.insertId, ...newCategory });
+    }
+  );
 };
 
 Category.getAll = (name, result) => {
@@ -51,8 +49,12 @@ Category.getAll = (name, result) => {
 
 Category.updateNameById = (id, category_name, result) => {
   sql.query(
-    "UPDATE ec_care_laboratory_category SET category_name = ? WHERE id = ?",
-    [category_name, id],
+    "UPDATE ec_care_laboratory_category SET category_name = ?, updated_at = ? WHERE id = ?",
+    [
+      category_name,
+      new Date().toISOString().slice(0, 19).replace("T", " "),
+      id,
+    ],
     (err, res) => {
       if (err) {
         console.log("Error: ", err);

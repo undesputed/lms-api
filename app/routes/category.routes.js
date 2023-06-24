@@ -6,11 +6,11 @@ module.exports = (app) => {
   var router = require("express").Router();
 
   //Create
-
+  router.post("/", category.create);
   //Retrieve
   router.get("/", category.findAll);
   //Update
-
+  router.put("/:id", category.update);
   //Delete
 
   app.use("/api/category", router);

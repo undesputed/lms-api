@@ -10,7 +10,7 @@ module.exports = (app) => {
   //Retrieve
   router.get("/", subCategory.findByCategory);
   //Update
-
+  router.put("/:id", subCategory.updateSubCategory);
   //Delete
   router.delete("/:id", subCategory.deleteSubCategory);
 
